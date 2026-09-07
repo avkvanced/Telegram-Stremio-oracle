@@ -19,11 +19,6 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.SYNC_TOKEN }}
 
-      - name: Get current commit
-        id: before
-        run: |
-          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-
       - name: Sync with upstream
         uses: aormsby/Fork-Sync-With-Upstream-action@v3.4
         with:
@@ -31,28 +26,3 @@ jobs:
           upstream_sync_branch: master
           target_sync_branch: master
           target_repo_token: ${{ secrets.SYNC_TOKEN }}
-
-      - name: Check for changes
-        id: changes
-        run: |
-          git fetch origin master
-          AFTER=$(git rev-parse origin/master)
-
-          echo "Before: ${{ steps.before.outputs.sha }}"
-          echo "After:  $AFTER"
-
-          if [ "${{ steps.before.outputs.sha }}" != "$AFTER" ]; then
-            echo "changed=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Trigger Docker build
-        if: steps.changes.outputs.changed == 'true'
-        run: |
-          gh workflow run "Build and Push Docker Image" \
-            --repo "${{ github.repository }}" \
-            --ref master
-        env:
-          GH_TOKEN: ${{ secrets.SYNC_TOKEN }}
-
