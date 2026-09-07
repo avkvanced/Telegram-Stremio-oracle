@@ -1,4 +1,3 @@
-```yaml
 name: Sync with Upstream
 
 on:
@@ -30,5 +29,5 @@ jobs:
             --ref master
         env:
           GH_TOKEN: ${{ secrets.SYNC_TOKEN }}
-```
+
 
