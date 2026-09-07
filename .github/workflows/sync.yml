@@ -1,3 +1,4 @@
+```yaml
 name: Sync with Upstream
 
 on:
@@ -20,4 +21,14 @@ jobs:
           upstream_sync_repo: avkgit1/Telegram-Stremio-oracle
           upstream_sync_branch: master
           target_sync_branch: master
-          target_repo_token: ${{ secrets.GITHUB_TOKEN }}
+          target_repo_token: ${{ secrets.SYNC_TOKEN }}
+
+      - name: Trigger Docker build
+        run: |
+          gh workflow run "Build and Push Docker Image" \
+            --repo "${{ github.repository }}" \
+            --ref master
+        env:
+          GH_TOKEN: ${{ secrets.SYNC_TOKEN }}
+```
+
