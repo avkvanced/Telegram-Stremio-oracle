@@ -17,7 +17,7 @@ jobs:
 
       - uses: aormsby/Fork-Sync-With-Upstream-action@v3.4
         with:
-          upstream_sync_repo: weebzone/Telegram-Stremio
+          upstream_sync_repo: avkgit1/Telegram-Stremio-oracle
           upstream_sync_branch: master
           target_sync_branch: master
           target_repo_token: ${{ secrets.GITHUB_TOKEN }}
